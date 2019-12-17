@@ -1,2 +1,6 @@
-# J-Jinn.github.io
-GitHub Pages
+layout: page
+title: "Main"
+permalink: /main/
+
+# Main Page
+Placeholder text.
