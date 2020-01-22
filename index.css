@@ -23,3 +23,9 @@ p {
 #document-body {
     background-color: black;
 }
+
+#redirect-button {
+    color: #5d1aff;
+    background-color: black;
+    box-shadow: inset 2px 2px 2px #666;
+}
