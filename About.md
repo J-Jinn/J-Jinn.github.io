@@ -3,7 +3,7 @@
 ***
 
 ### Project Adviser/Mentor: 
-######Professor Kenneth Arnold
+###### Professor Kenneth Arnold
 
 Instructor at Calvin University in the C.S. Department.
 
@@ -13,7 +13,8 @@ Instructor at Calvin University in the C.S. Department.
 
 ***
 
-### Student: Joseph Jinn
+### Students: 
+###### Joseph Jinn
 
 Student at Calvin University pursuing a B.C.S. alongside a Mathematics major.
 
