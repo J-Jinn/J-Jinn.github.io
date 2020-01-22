@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Flask Parent Template</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='template.css') }}">
+</head>
+<body id="document-body">
+<header>
+    <div class="container">
+        <h1 class="logo">Navigation Bar</h1>
+        <strong>
+            <ul class="menu">
+                <li><a href="{{ url_for('home_page') }}">Home Page</a></li>
+                <li><a href="{{ url_for('demo_page') }}">Demo Page</a></li>
+                <li><a href="{{ url_for('visualization_page') }}">Visualization Page</a></li>
+            </ul>
+        </strong>
+    </div>
+</header>
+
+{% block content %}
+{% endblock %}
+
+</body>
+</html>

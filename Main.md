@@ -11,3 +11,5 @@
 [About Page](https://j-jinn.github.io/About)
 
 [CS-396 Status Report (converted from Jupyter Notebook)](https://j-jinn.github.io/run_generation_custom_notebook_4)
+
+[Demo - Visualization](https://j-jinn.github.io/demo.html)

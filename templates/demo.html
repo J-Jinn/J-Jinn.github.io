@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<!---------------------------------------------------------------------------------------------------->
+<head id="document-head">
+    <meta charset="UTF-8">
+    <title>Calvin University CS-396/398 Senior Project - Demo</title>
+
+    <!-- Javascript files -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+    <!-- CSS stylesheet file -->
+    <link rel="stylesheet" href="../static/demo.css">
+</head>
+<!---------------------------------------------------------------------------------------------------->
+<body id="document-body">
+
+<!--Site Navigation (inherited from template.html -->
+{% extends "template.html" %}
+{% block content %}
+
+<h1>Demo - Text Prediction (GPT-2 Model)</h1>
+<h2>Note: Manual mode is still under construction.</h2>
+
+<!-- User input -->
+<div id="user-input-div">
+    <form id="input-form">
+        <label id="input-label">
+            <textarea id="input-text-area" rows="25" cols="150">Enter text here.</textarea>
+        </label>
+    </form>
+</div>
+
+<!-- Program mode -->
+<div id="program-mode-div">
+    <button id="automatic-button" type="submit">Auto</button>
+    <button id="manual-button" type="submit">Manual</button>
+    <p>Please choose between automated text prediction or interactive text prediction:<br>
+        Automated chooses default hard-coded settings and proceeds on its own.<br>
+        Interactive allows the user to choose the next token used in text prediction
+        and adjust some other settings.<br>
+    </p>
+</div>
+
+<!-- Program output -->
+<div id="program-output-div">
+    <canvas id="output-canvas" width="720" height="540">
+        <p>Your browser doesn't support the HTML5 canvas element.</p>
+    </canvas>
+</div>
+
+<!-- Javascript file -->
+<script type="text/javascript" src="../static/demo.js"></script>
+{% endblock %}
+</body>
+<!---------------------------------------------------------------------------------------------------->
+</html>

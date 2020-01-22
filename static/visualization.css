@@ -1,0 +1,46 @@
+/**
+visualization.css is the stylesheet for visualization.html
+
+Course: cs-396/398 Senior Projects
+Course Coordinator: Professor Kenneth
+Adviser: Professor Kenneth Arnold
+Student: Joseph Jinn
+Date: 1-20-20
+ */
+
+h1 {
+    color: #5d1aff;
+}
+
+h2 {
+    color: #5d1aff;
+}
+
+p {
+    color: #5d1aff;
+}
+
+/*
+For positioning svg over canvas with transparent background.
+ */
+.wrapper {
+    position: relative;
+}
+
+#visualization-canvas {
+    position: relative;
+    left: 0;
+    top: 0;
+    /*background-color: black;*/
+    box-shadow: 2px 2px 2px #5d1aff;
+}
+
+#visualization-svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: transparent;
+}
+#document-body {
+    background-color: black;
+}

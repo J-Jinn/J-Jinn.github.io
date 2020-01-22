@@ -1,0 +1,21 @@
+/**
+template.css is the stylesheet for template.html
+
+Course: cs-396/398 Senior Projects
+Course Coordinator: Professor Kenneth
+Adviser: Professor Kenneth Arnold
+Student: Joseph Jinn
+Date: 1-20-20
+ */
+
+h1 {
+    color: #5d1aff;
+}
+
+p {
+    color: #5d1aff;
+}
+
+#document-body {
+    background-color: black;
+}
