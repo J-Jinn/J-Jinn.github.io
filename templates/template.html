@@ -8,21 +8,23 @@
 </head>
 <!---------------------------------------------------------------------------------------------------->
 <body id="document-body">
-<header>
+<header id="document-header">
     <div class="container">
         <h1 class="logo">Navigation Bar</h1>
-        <strong>
+        <strong><nav>
             <ul class="menu">
                 <li><a href="{{ url_for('home_page') }}">Home Page</a></li>
                 <li><a href="{{ url_for('demo_page') }}">Demo Page</a></li>
                 <li><a href="{{ url_for('visualization_page') }}">Visualization Page</a></li>
             </ul>
-        </strong>
+        </nav></strong>
     </div>
 </header>
 
-{% block content %}
-{% endblock %}
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
 
 </body>
 <!---------------------------------------------------------------------------------------------------->

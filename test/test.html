@@ -1,77 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
-<!---------------------------------------------------------------------------------------------------->
-<head id="document-head">
-    <meta charset="UTF-8">
-    <title>Calvin University CS-396/398 Senior Project - Visualization</title>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <style type="text/css">
 
-    <!-- Javascript files -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
 
-    <!-- Word tree from  https://www.jasondavies.com/wordtree -->
-    <script src="../static/word_tree.js"></script>
+        .node circle {
+            cursor: pointer;
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 1.5px;
+        }
 
-    <!-- CSS stylesheet file -->
-    <link rel="stylesheet" href="../static/visualization.css">
+        .node text {
+            font-size: 11px;
+        }
+
+        path.link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 1.5px;
+        }
+
+    </style>
 </head>
-<!---------------------------------------------------------------------------------------------------->
-<body id="document-body">
-
-<!--Site Navigation (inherited from template.html -->
-{% extends "template.html" %}
-{% block content %}
-
-<h1>Visualization - Text Prediction (GPT-2 Model)</h1>
-<h2>Note: Utilizing "faked" data until Python back-end is complete.</h2>
-
-<!-- Wrapper for positioning -->
-<div class="wrapper">
-    <!-- Visualization background image -->
-    <div id="visualization-background-div">
-        <canvas id="visualization-canvas" width="720" height="540">
-            <p>Your browser doesn't support the HTML5 canvas element.</p>
-        </canvas>
-    </div>
-    <!-- Visualization -->
-    <svg id="visualization-svg" width="720" height="540"></svg>
-</div>
-
-<!-- Generate the visualization -->
-<div id="generate-button-div">
-    <button id="generate-button" type="submit">Generate</button>
-    <p>
-        Click the button to generate the visualization.<br>
-    </p>
-</div>
-
-<!-- Word tree Elements -->
+<body>
 <div id="body">
     <div id="footer">
         <div class="hint">click or option-click to expand or collapse</div>
     </div>
 </div>
-<!-- - -->
+<script type="text/javascript">
 
-<!----------------------------------------------------------------------------------------->
-<script>
     var m = [20, 120, 20, 120],
         w = 1280 - m[1] - m[3],
         h = 800 - m[0] - m[2],
         i = 0,
         root;
 
-    // https://stackoverflow.com/questions/38337997/d3-js-v4-d3-layout-tree-has-been-removed
-    var tree = d3.tree()
+    var tree = d3.layout.tree()
         .size([h, w]);
 
-    // https://stackoverflow.com/questions/40845121/where-is-d3-svg-diagonal
-    var diagonal = function link(d) {
-        return "M" + d.source.y + "," + d.source.x
-            + "C" + (d.source.y + d.target.y) / 2 + "," + d.source.x
-            + " " + (d.source.y + d.target.y) / 2 + "," + d.target.x
-            + " " + d.target.y + "," + d.target.x;
-    };
+    var diagonal = d3.svg.diagonal()
+        .projection(function (d) {
+            return [d.y, d.x];
+        });
 
     var vis = d3.select("#body").append("svg:svg")
         .attr("width", w + m[1] + m[3])
@@ -79,7 +54,7 @@
         .append("svg:g")
         .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-    d3.json("../static/files/flare.json", function (json) {
+    d3.json("flare.json", function (json) {
         root = json;
         root.x0 = h / 2;
         root.y0 = 0;
@@ -91,7 +66,7 @@
             }
         }
 
-// Initialize the display to show a few nodes.
+        // Initialize the display to show a few nodes.
         root.children.forEach(toggleAll);
         update(root);
     });
@@ -99,21 +74,21 @@
     function update(source) {
         var duration = d3.event && d3.event.altKey ? 5000 : 500;
 
-// Compute the new tree layout.
+        // Compute the new tree layout.
         var nodes = tree.nodes(root).reverse();
 
-// Normalize for fixed-depth.
+        // Normalize for fixed-depth.
         nodes.forEach(function (d) {
             d.y = d.depth * 180;
         });
 
-// Update the nodes…
+        // Update the nodes…
         var node = vis.selectAll("g.node")
             .data(nodes, function (d) {
                 return d.id || (d.id = ++i);
             });
 
-// Enter any new nodes at the parent's previous position.
+        // Enter any new nodes at the parent's previous position.
         var nodeEnter = node.enter().append("svg:g")
             .attr("class", "node")
             .attr("transform", function (d) {
@@ -143,7 +118,7 @@
             })
             .style("fill-opacity", 1e-6);
 
-// Transition nodes to their new position.
+        // Transition nodes to their new position.
         var nodeUpdate = node.transition()
             .duration(duration)
             .attr("transform", function (d) {
@@ -159,7 +134,7 @@
         nodeUpdate.select("text")
             .style("fill-opacity", 1);
 
-// Transition exiting nodes to the parent's new position.
+        // Transition exiting nodes to the parent's new position.
         var nodeExit = node.exit().transition()
             .duration(duration)
             .attr("transform", function (d) {
@@ -173,13 +148,13 @@
         nodeExit.select("text")
             .style("fill-opacity", 1e-6);
 
-// Update the links…
+        // Update the links…
         var link = vis.selectAll("path.link")
             .data(tree.links(nodes), function (d) {
                 return d.target.id;
             });
 
-// Enter any new links at the parent's previous position.
+        // Enter any new links at the parent's previous position.
         link.enter().insert("svg:path", "g")
             .attr("class", "link")
             .attr("d", function (d) {
@@ -190,12 +165,12 @@
             .duration(duration)
             .attr("d", diagonal);
 
-// Transition links to their new position.
+        // Transition links to their new position.
         link.transition()
             .duration(duration)
             .attr("d", diagonal);
 
-// Transition exiting nodes to the parent's new position.
+        // Transition exiting nodes to the parent's new position.
         link.exit().transition()
             .duration(duration)
             .attr("d", function (d) {
@@ -204,7 +179,7 @@
             })
             .remove();
 
-// Stash the old positions for transition.
+        // Stash the old positions for transition.
         nodes.forEach(function (d) {
             d.x0 = d.x;
             d.y0 = d.y;
@@ -221,12 +196,7 @@
             d._children = null;
         }
     }
-</script>
-<!------------------------------------------------->
 
-<!-- Javascript file -->
-<script src="../static/visualization.js"></script>
-{% endblock %}
+</script>
 </body>
-<!---------------------------------------------------------------------------------------------------->
 </html>

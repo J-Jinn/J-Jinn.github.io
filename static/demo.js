@@ -83,27 +83,6 @@ demo.auto = () => {
         // Output the results of the text prediction model.
         demo.outputResults(`${text}`)
     });
-
-    if(debug) {
-        // GET is the default method, so we don't need to set it.
-        fetch('/getInputText')
-            .then(function (response) {
-                return response.text();
-            }).then(function (text) {
-            console.log('GET response text:');
-            console.log(text); // Print the greeting as text.
-        });
-
-        // Send the same request.
-        fetch('/getInputText')
-            .then(function (response) {
-                return response.json(); // But parse it as JSON this time.
-            })
-            .then(function (json) {
-                console.log('GET response as JSON:');
-                console.log(json); // Here’s our JSON object.
-            })
-    }
 };
 
 /**
