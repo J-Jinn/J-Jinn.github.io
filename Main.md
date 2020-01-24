@@ -22,7 +22,9 @@
 Note: Navigation bar visible and available only with working Flask web framework.
 
 [Project Pages - Home (currently under construction)](https://j-jinn.github.io/templates/home)
+
 [Project Pages - Demo (currently under construction)](https://j-jinn.github.io/templates/demo)
+
 [Project Pages - Visualization (currently under construction)](https://j-jinn.github.io/templates/visualization)
 
 ***
