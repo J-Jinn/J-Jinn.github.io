@@ -162,6 +162,10 @@ visualization.drawWordTree = () => {
             ]
         };
 
+
+    // Clear svg before drawing another.
+    d3.selectAll("svg > *").remove();
+
     // Set the dimensions and margins of the diagram
     let margin = {top: 20, right: 90, bottom: 30, left: 90},
         width = 960 - margin.left - margin.right,
