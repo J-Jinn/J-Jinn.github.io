@@ -55,18 +55,20 @@ For positioning svg over canvas with transparent background.
 /************************************************************************************************/
 
 .node circle {
-    cursor: pointer;
     fill: #fff;
     stroke: steelblue;
-    stroke-width: 1.5px;
+    stroke-width: 3px;
 }
 
 .node text {
-    font-size: 11px;
+    fill: #5d1aff;
+    font: 12px sans-serif;
 }
 
-path.link {
+.link {
     fill: none;
-    stroke: #ccc;
-    stroke-width: 1.5px;
+    stroke: #8e7376;
+    stroke-width: 2px;
 }
+
+/************************************************************************************************/

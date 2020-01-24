@@ -20,7 +20,7 @@ https://healeycodes.com/javascript/python/beginners/webdev/2019/04/11/talking-be
 import pandas as pd
 import csv
 from flask import Flask, jsonify, request, render_template
-from huggingface_transformers import run_generation_visualization as rgv
+# from huggingface_transformers import run_generation_visualization as rgv
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 debug = False

@@ -41,9 +41,6 @@ visualization.init = () => {
     visualization.loadImages();
     // Draw images.
     visualization.drawBackground();
-
-    // Draw the word tree.
-    // visualization.drawWordTree();
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,6 +72,9 @@ visualization.generate = () => {
     visualization.importDatasetAsJson();
     // Test import CSV using D3.
     visualization.importDatasetWithD3();
+
+    // Draw the word tree.
+    visualization.drawWordTree();
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,141 +135,235 @@ visualization.importDatasetAsJson = () => {
 
 /**
  * Function to draw a simple word tree.
+ *
+ * Word Tree Code URL: https://bl.ocks.org/d3noob/1a96af738c89b88723eb63456beb6510
+ *
+ * TODO: figure out how to construct the necessary data structure/format when using actual live data.
  */
 visualization.drawWordTree = () => {
-    var m = [20, 120, 20, 120],
-        w = 1280 - m[1] - m[3],
-        h = 800 - m[0] - m[2],
-        i = 0,
+    let treeData =
+        {
+            "name": "Hello",
+            "children": [
+                {
+                    "name": "-World, which may seem unprofessional on the surface (or",
+                    "children": [
+                        {"name": " at least to me); I hope we can discuss",
+                            "children": [
+                                {"name": " it later if something interesting comes up"},
+                                {"name": " more on the differences between the"}
+                            ]
+                        },
+                        {"name": " not) but will get our project published quicker as"}
+                    ]
+                },
+                {"name": "-world package is actually part of some existing project."},
+                {"name": "-everyone, thanks for watching the second part of my new story;"}
+            ]
+        };
+
+    // Set the dimensions and margins of the diagram
+    let margin = {top: 20, right: 90, bottom: 30, left: 90},
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page (removed append)
+    // appends a 'group' element to 'svg'
+    // moves the 'group' element to the top left margin
+    let svg = d3.select("#visualization-svg")
+        .attr("width", width + margin.right + margin.left)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate("
+            + margin.left + "," + margin.top + ")");
+
+    //Set dimensions of canvas to same dimensions as svg.
+    d3.select("#visualization-canvas")
+        .attr("width", width + margin.right + margin.left)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate("
+            + margin.left + "," + margin.top + ")");
+
+    // Ghetto way to redraw background image on canvas after resizing in d3.
+    visualization.context.clearRect(0, 0, width + margin.right + margin.left, height + margin.top + margin.bottom);
+    visualization.context.drawImage(background_image, 0, 0,
+        width + margin.right + margin.left,height + margin.top + margin.bottom);
+
+    let i = 0,
+        duration = 750,
         root;
 
-    var tree = d3.layout.tree()
-        .size([h, w]);
+    // declares a tree layout and assigns the size
+    let treemap = d3.tree().size([height, width]);
 
-    var diagonal = d3.svg.diagonal()
-        .projection(function(d) { return [d.y, d.x]; });
-
-    var vis = d3.select("#body").append("svg:svg")
-        .attr("width", w + m[1] + m[3])
-        .attr("height", h + m[0] + m[2])
-        .append("svg:g")
-        .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
-
-    d3.json("flare.json", function(json) {
-        root = json;
-        root.x0 = h / 2;
-        root.y0 = 0;
-
-        function toggleAll(d) {
-            if (d.children) {
-                d.children.forEach(toggleAll);
-                toggle(d);
-            }
-        }
-
-        // Initialize the display to show a few nodes.
-        root.children.forEach(toggleAll);
-        update(root);
+    // Assigns parent, children, height, depth
+    root = d3.hierarchy(treeData, function (d) {
+        return d.children;
     });
+    root.x0 = height / 2;
+    root.y0 = 0;
+
+    // Collapse after the second level
+    root.children.forEach(collapse);
+
+    update(root);
+
+    // Collapse the node and all it's children
+    function collapse(d) {
+        if (d.children) {
+            d._children = d.children;
+            d._children.forEach(collapse);
+            d.children = null
+        }
+    }
 
     function update(source) {
-        var duration = d3.event && d3.event.altKey ? 5000 : 500;
+
+        // Assigns the x and y position for the nodes
+        // noinspection JSValidateTypes
+        let treeData = treemap(root);
 
         // Compute the new tree layout.
-        var nodes = tree.nodes(root).reverse();
+        let nodes = treeData.descendants(),
+            links = treeData.descendants().slice(1);
 
         // Normalize for fixed-depth.
-        nodes.forEach(function(d) { d.y = d.depth * 180; });
+        nodes.forEach(function (d) {
+            d.y = d.depth * 180
+        });
 
-        // Update the nodes…
-        var node = vis.selectAll("g.node")
-            .data(nodes, function(d) { return d.id || (d.id = ++i); });
+        // ****************** Nodes section ***************************
 
-        // Enter any new nodes at the parent's previous position.
-        var nodeEnter = node.enter().append("svg:g")
-            .attr("class", "node")
-            .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-            .on("click", function(d) { toggle(d); update(d); });
+        // Update the nodes...
+        let node = svg.selectAll('g.node')
+            .data(nodes, function (d) {
+                return d.id || (d.id = ++i);
+            });
 
-        nodeEnter.append("svg:circle")
-            .attr("r", 1e-6)
-            .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+        // Enter any new modes at the parent's previous position.
+        let nodeEnter = node.enter().append('g')
+            .attr('class', 'node')
+            .attr("transform", function () {
+                return "translate(" + source.y0 + "," + source.x0 + ")";
+            })
+            .on('click', click);
 
-        nodeEnter.append("svg:text")
-            .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
+        // Add Circle for the nodes
+        nodeEnter.append('circle')
+            .attr('class', 'node')
+            .attr('r', 1e-6)
+            .style("fill", function (d) {
+                return d._children ? "lightsteelblue" : "#fff";
+            });
+
+        // Add labels for the nodes
+        nodeEnter.append('text')
             .attr("dy", ".35em")
-            .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
-            .text(function(d) { return d.name; })
-            .style("fill-opacity", 1e-6);
+            .attr("x", function (d) {
+                return d.children || d._children ? -13 : 13;
+            })
+            .attr("text-anchor", function (d) {
+                return d.children || d._children ? "end" : "start";
+            })
+            .text(function (d) {
+                return d.data.name;
+            });
 
-        // Transition nodes to their new position.
-        var nodeUpdate = node.transition()
+        // UPDATE
+        let nodeUpdate = nodeEnter.merge(node);
+
+        // Transition to the proper position for the node
+        nodeUpdate.transition()
             .duration(duration)
-            .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
+            .attr("transform", function (d) {
+                return "translate(" + d.y + "," + d.x + ")";
+            });
 
-        nodeUpdate.select("circle")
-            .attr("r", 4.5)
-            .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+        // Update the node attributes and style
+        nodeUpdate.select('circle.node')
+            .attr('r', 10)
+            .style("fill", function (d) {
+                return d._children ? "lightsteelblue" : "#c0adff";
+            })
+            .attr('cursor', 'pointer');
 
-        nodeUpdate.select("text")
-            .style("fill-opacity", 1);
 
-        // Transition exiting nodes to the parent's new position.
-        var nodeExit = node.exit().transition()
+        // Remove any exiting nodes
+        let nodeExit = node.exit().transition()
             .duration(duration)
-            .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+            .attr("transform", function () {
+                return "translate(" + source.y + "," + source.x + ")";
+            })
             .remove();
 
-        nodeExit.select("circle")
-            .attr("r", 1e-6);
+        // On exit reduce the node circles size to 0
+        nodeExit.select('circle')
+            .attr('r', 1e-6);
 
-        nodeExit.select("text")
-            .style("fill-opacity", 1e-6);
+        // On exit reduce the opacity of text labels
+        nodeExit.select('text')
+            .style('fill-opacity', 1e-6);
 
-        // Update the links…
-        var link = vis.selectAll("path.link")
-            .data(tree.links(nodes), function(d) { return d.target.id; });
+        // ****************** links section ***************************
+
+        // Update the links...
+        let link = svg.selectAll('path.link')
+            .data(links, function (d) {
+                return d.id;
+            });
 
         // Enter any new links at the parent's previous position.
-        link.enter().insert("svg:path", "g")
+        let linkEnter = link.enter().insert('path', "g")
             .attr("class", "link")
-            .attr("d", function(d) {
-                var o = {x: source.x0, y: source.y0};
-                return diagonal({source: o, target: o});
-            })
-            .transition()
-            .duration(duration)
-            .attr("d", diagonal);
+            .attr('d', function () {
+                let o = {x: source.x0, y: source.y0};
+                return diagonal(o, o)
+            });
 
-        // Transition links to their new position.
-        link.transition()
-            .duration(duration)
-            .attr("d", diagonal);
+        // UPDATE
+        let linkUpdate = linkEnter.merge(link);
 
-        // Transition exiting nodes to the parent's new position.
+        // Transition back to the parent element position
+        linkUpdate.transition()
+            .duration(duration)
+            .attr('d', function (d) {
+                return diagonal(d, d.parent)
+            });
+
+        // Remove any exiting links
         link.exit().transition()
             .duration(duration)
-            .attr("d", function(d) {
-                var o = {x: source.x, y: source.y};
-                return diagonal({source: o, target: o});
+            .attr('d', function () {
+                let o = {x: source.x, y: source.y};
+                return diagonal(o, o)
             })
             .remove();
-
-        // Stash the old positions for transition.
-        nodes.forEach(function(d) {
+    // Store the old positions for transition.
+        nodes.forEach(function (d) {
             d.x0 = d.x;
             d.y0 = d.y;
         });
-    }
 
-// Toggle children.
-    function toggle(d) {
-        if (d.children) {
-            d._children = d.children;
-            d.children = null;
-        } else {
-            d.children = d._children;
-            d._children = null;
+        // Creates a curved (diagonal) path from parent to the child nodes
+        function diagonal(s, d) {
+
+            return `M ${s.y} ${s.x}
+            C ${(s.y + d.y) / 2} ${s.x},
+              ${(s.y + d.y) / 2} ${d.x},
+              ${d.y} ${d.x}`
+        }
+
+        // Toggle children on click.
+        function click(d) {
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+            } else {
+                d.children = d._children;
+                d._children = null;
+            }
+            update(d);
         }
     }
 };
