@@ -14,6 +14,16 @@ https://exploreflask.com/en/latest/organizing.html
 
 https://healeycodes.com/javascript/python/beginners/webdev/2019/04/11/talking-between-languages.html
 (Communication between Javascript and Python via Flask)
+
+
+Create requirements.txt:
+
+Go to your project environment conda activate <env_name>
+conda list gives you list of packages used for the environment.
+conda list -e > requirements.txt save all the info about packages to your folder.
+conda env export > <env_name>.yml.
+pip freeze.
+
 ############################################################################################################
 """
 

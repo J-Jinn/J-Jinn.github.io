@@ -108,7 +108,7 @@ demo.getInputText= () => {
  */
 demo.outputResults = (output) => {
     demo.context.clearRect(0, 0, demo.canvas.width, demo.canvas.height);
-    demo.context.fillStyle = "#5d1aff";
+    demo.context.fillStyle = "#36139b";
     demo.context.font = "italic bold 12px/30px Georgia, serif";
     demo.context.fillText( output, 10, 50);
 };

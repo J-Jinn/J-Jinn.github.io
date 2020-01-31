@@ -168,8 +168,8 @@ visualization.drawWordTree = () => {
 
     // Set the dimensions and margins of the diagram
     let margin = {top: 20, right: 90, bottom: 30, left: 90},
-        width = 960 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
+        width = 1024 - margin.left - margin.right,
+        height = 768 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page (removed append)
     // appends a 'group' element to 'svg'

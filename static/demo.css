@@ -9,15 +9,15 @@ Date: 1-20-20
  */
 
 h1 {
-    color: #5d1aff;
+    color: #2ecd3b;
 }
 
 h2 {
-    color: #5d1aff;
+    color: #2ecd3b;
 }
 
 p {
-    color: #5d1aff;
+    color: #27cd51;
 }
 
 #document-body {
@@ -25,7 +25,7 @@ p {
 }
 
 #input-text-area {
-    color: #5d1aff;
+    color: #27cd51;
     background-color: black;
     box-shadow: inset 2px 2px 2px #666;
 }
@@ -36,13 +36,13 @@ p {
 }
 
 #automatic-button {
-    color: #5d1aff;
+    color: #27cd51;
     background-color: black;
     box-shadow: inset 2px 2px 2px #666;
 }
 
 #manual-button {
-    color: #5d1aff;
+    color: #27cd51;
     background-color: black;
     box-shadow: inset 2px 2px 2px #666;
 }
