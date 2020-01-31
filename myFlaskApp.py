@@ -24,6 +24,11 @@ conda list -e > requirements.txt save all the info about packages to your folder
 conda env export > <env_name>.yml.
 pip freeze.
 
+Avoiding PythonAnywhere console closing issue due to excessive output:
+https://www.pythonanywhere.com/forums/topic/20962/
+
+"The solution is to redirect output to file: pip install -r requirements.txt > /tmp/temp"
+
 ############################################################################################################
 """
 
