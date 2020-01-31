@@ -108,7 +108,7 @@ def send_visualization_data():
     TODO: rewrite run_generation_visualization in order to obtain actual data.
     :return: String/CSV
     """
-    dataset_filepath = "/static/files/next_token_logits_test"
+    dataset_filepath = "static/files/next_token_logits_test"
 
     df = pd.read_csv(f"{dataset_filepath}.csv", sep=',', encoding="utf-8")
     df.drop_duplicates(inplace=True)

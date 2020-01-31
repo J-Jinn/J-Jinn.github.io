@@ -134,7 +134,7 @@ demo.importTestDataset = () => {
      * Function import the data.
      */
     // noinspection SpellCheckingInspection
-    d3.csv("../J-Jinn.github.io/huggingface_transformers/next_token_logits_test.csv").then(function(data) {
+    d3.csv("../static/files/next_token_logits_test.csv").then(function(data) {
         processData(data);
     }).catch(function(error) {
         console.log(error);
