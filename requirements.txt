@@ -88,8 +88,8 @@ pyrsistent==0.15.4
 pytest==5.2.2
 python-dateutil==2.8.1
 pytz==2019.3
-pywin32==223
-pywinpty==0.5.5
+# pywin32==223
+# pywinpty==0.5.5
 PyYAML==5.1.2
 pyzmq==18.1.0
 qtconsole==4.5.5
