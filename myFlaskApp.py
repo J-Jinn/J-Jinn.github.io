@@ -35,7 +35,7 @@ https://www.pythonanywhere.com/forums/topic/20962/
 import pandas as pd
 import csv
 from flask import Flask, jsonify, request, render_template
-# from huggingface_transformers import run_generation_visualization as rgv
+from huggingface_transformers import run_generation_visualization_auto as rgv
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 debug = False
@@ -89,13 +89,14 @@ def get_input_text():
             user_input_string = request_json.get('user_input_text')
 
             # TODO: Here is where we need to run GPT-2 to produce predicted text to return.
-            # rgv.main()
+            user_output_string = rgv.main(user_input_string)
 
             if debug:
                 print(f"User input text received")
                 print(f"From HTML/Javascript: {request.get_json()}")  # parse as JSON
                 print(f"User input text: {user_input_string}")
-            return user_input_string, 200
+                print(f"User output text: {user_output_string}")
+            return user_output_string, 200
         else:
             print(f"Data is not in JSON format!")
             return 'Failed to receive user input text.', 200
