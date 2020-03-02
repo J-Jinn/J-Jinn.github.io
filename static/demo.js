@@ -110,11 +110,11 @@ demo.dynamic = () => {
     }).then(function (response) {
         // Wait for the web server to return the results.
         return response.text();
-    }).then(function (text) {
-        console.log(`From Flask/Python: ${text}`);
+    }).then(function (jsonObj) {
+        console.log(`From Flask/Python: ${jsonObj}`);
         // Output the returned data.
-        demo.outputResults(`${text}`);
-        demo.drawVisualization(text);
+        demo.outputResults(`${jsonObj}`);
+        demo.drawVisualization(jsonObj);
     });
 };
 
@@ -172,8 +172,19 @@ demo.importTestDataset = () => {
 
 demo.drawVisualization = (output) => {
 
-    let predictedText = output[0];
-    let tokenLists = output[1];
+    // Convert test data from GPT2-model into a JSON object as expected of Flask response.
+    let jsonOutput = JSON.stringify(output);
+    console.log(`JSON object:\n${jsonOutput}`);
+    console.log(`JSON object type is: ${typeof jsonOutput}`);
+
+    // Convert JSON object into a Javascript object.
+    let jsonOutputParsed = JSON.parse(jsonOutput);
+    console.log(`JSON object parsed:\n${jsonOutputParsed}`);
+    console.log(`JSON object parsed type is: ${typeof jsonOutputParsed}`);
+
+    // Separate the predicted text from its associated list of tokens for each word in the text.
+    let predictedText = jsonOutputParsed[0];
+    let tokenLists = jsonOutputParsed[1];
     let restructureData = [];
 
     // Take a look at our data.
@@ -196,13 +207,14 @@ demo.drawVisualization = (output) => {
         }
     }
 
+    // TODO - dynamic resizing of svg width based on the length of the predicted text and its tokens.
     d3.selectAll('svg#visualization-svg')  // select the svg element
-        .attr('width', 1024)
-        .attr('height', 768)
-        .selectAll('rect')  // new selection starts here (and is empty for now)
+        .attr('width', 3840)
+        .attr('height', 240)
+        .selectAll('g')  // new selection starts here (and is empty for now)
         .data(restructureData)
         .enter()
-        .append('rect')     // selection now has 11 rects, each associated with 1 row of data
+        .append('g')     // selection now has 11 rects, each associated with 1 row of data
         .style('transform', (d, i) => 'translate(' + (i * 100) + 'px, 50px)')
         .selectAll('text')
         .data(d => (d.recs_shown || []).map(word => ({word: word, matchesParent: word === d.word})))
@@ -211,7 +223,6 @@ demo.drawVisualization = (output) => {
         .attr('y', (d, i) => i * 20)
         .text(d => d.word)
         .style('fill', d => d.matchesParent ? 'red' : 'black')
-        .style('fill', 'red');
 
     // let suggestionsGroup = svg.append('g');
     //
