@@ -142,7 +142,7 @@ def get_input_text_for_visualization_demo():
             user_input_string = request_json.get('user_input_text')
 
             # Call GPT-2 model, which returns predictions and other data.
-            data = rgv.main(user_input_string)
+            data = rgvd.main(user_input_string)
 
             if debug:
                 print(f"User input text received")
@@ -156,6 +156,7 @@ def get_input_text_for_visualization_demo():
             return 'Failed to receive user input text.', 200
 
 ####################################################################################################################
+
 
 if __name__ == "__main__":
     """

@@ -41,8 +41,11 @@ p {
     box-shadow: inset 2px 2px 2px #666;
 }
 
-#manual-button {
+#dynamic-button {
     color: #27cd51;
     background-color: black;
     box-shadow: inset 2px 2px 2px #666;
+}
+
+#visualization-svg {
 }

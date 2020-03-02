@@ -34,7 +34,7 @@
 <!-- Program mode -->
 <div id="program-mode-div">
     <button id="automatic-button" type="submit">Auto</button>
-    <button id="manual-button" type="submit">Manual</button>
+    <button id="dynamic-button" type="submit">Dynamic</button>
     <p>Please choose between automated text prediction or interactive text prediction:<br>
         Automated chooses default hard-coded settings and proceeds on its own.<br>
         Interactive allows the user to choose the next token used in text prediction
@@ -47,6 +47,12 @@
     <canvas id="output-canvas" width="720" height="540">
         <p>Your browser doesn't support the HTML5 canvas element.</p>
     </canvas>
+</div>
+
+<!-- Program visualization -->
+<div id="program-visualization-div">
+    <!-- Visualization -->
+    <svg id="visualization-svg" width="720" height="540"></svg>
 </div>
 
 <!-- Javascript file -->
