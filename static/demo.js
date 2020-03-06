@@ -13,7 +13,114 @@ Date: 1-20-20
 // Global variables.
 const debug = true;
 const demo = {};
-const testData = ['Hello.\n\n"We have to get the ball rolling and we\'re going to be ready for it', {0: [',', '.', '\n'], 1: ['\n', ' I', ' You'], 2: ['\n', 'I', 'The'], 3: ['I', 'The', '"'], 4: ['I', 'You', 'We'], 5: ["'re", ' are', ' have'], 6: [' a', ' to', ' been'], 7: [' be', ' do', ' get'], 8: [' the', ' this', ' out'], 9: [' ball', ' money', ' job'], 10: [' rolling', ' out', ' back'], 11: ['.', ',"', ' and'], 12: [' get', ' we', ' make'], 13: [' have', ' need', "'re"], 14: [' going', ' not', ' in'], 15: [' to', ' in', ' into'], 16: [' have', ' get', ' be'], 17: [' ready', ' able', ' a'], 18: [' to', ' for', '."'], 19: [' the', ' that', ' it']}];
+
+const testData = {
+    "data": [
+        "Hello\nI have to admit I am not sure what to make out about it, I'm not a",
+        {
+            "0": [
+                ",",
+                ".",
+                "\n"
+            ],
+            "1": [
+                "\n",
+                "I",
+                "The"
+            ],
+            "2": [
+                "'m",
+                "'ve",
+                " have"
+            ],
+            "3": [
+                " been",
+                " a",
+                " to"
+            ],
+            "4": [
+                " say",
+                " admit",
+                " tell"
+            ],
+            "5": [
+                ",",
+                " that",
+                " I"
+            ],
+            "6": [
+                " was",
+                "'m",
+                " am"
+            ],
+            "7": [
+                " a",
+                " not",
+                " very"
+            ],
+            "8": [
+                " a",
+                " sure",
+                " quite"
+            ],
+            "9": [
+                " if",
+                " what",
+                " how"
+            ],
+            "10": [
+                " to",
+                " I",
+                " the"
+            ],
+            "11": [
+                " say",
+                " make",
+                " do"
+            ],
+            "12": [
+                " of",
+                " out",
+                " about"
+            ],
+            "13": [
+                " of",
+                " about",
+                "."
+            ],
+            "14": [
+                " this",
+                " the",
+                " it"
+            ],
+            "15": [
+                ".",
+                ",",
+                " but"
+            ],
+            "16": [
+                " but",
+                " I",
+                " so"
+            ],
+            "17": [
+                " am",
+                " just",
+                "'m"
+            ],
+            "18": [
+                " not",
+                " just",
+                " sure"
+            ],
+            "19": [
+                " sure",
+                " really",
+                " a"
+            ]
+        }
+    ]
+};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -90,7 +197,7 @@ demo.auto = () => {
 };
 
 /**
- * Manual mode.
+ * Dynamic mode.
  */
 demo.dynamic = () => {
     programMode = "dynamic";
@@ -139,6 +246,7 @@ demo.outputResults = (output) => {
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+0
 
 /**
  * Function to process imported data.
@@ -170,38 +278,51 @@ demo.importTestDataset = () => {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Function to process and visualization GPT2-model predicted text.
+ * Note: Ugly as hell code but functional...
+ *
+ * @param output - JSON response object.
+ */
 demo.drawVisualization = (output) => {
 
-    // Convert test data from GPT2-model into a JSON object as expected of Flask response.
-    let jsonOutput = JSON.stringify(output);
-    console.log(`JSON object:\n${jsonOutput}`);
-    console.log(`JSON object type is: ${typeof jsonOutput}`);
+    if (debug) {
+        console.log(`Output variable:\n${output}`);
+        console.log(`Output variable is of type: ${typeof output}`);
 
-    // Convert JSON object into a Javascript object.
-    let jsonOutputParsed = JSON.parse(jsonOutput);
-    console.log(`JSON object parsed:\n${jsonOutputParsed}`);
-    console.log(`JSON object parsed type is: ${typeof jsonOutputParsed}`);
+        // Convert test data from GPT2-model into a JSON object as expected of Flask response.
+        let jsonOutput = JSON.stringify(output);
+        console.log(`JSON object:\n${jsonOutput}`);
+        console.log(`JSON object type is: ${typeof jsonOutput}`);
+
+        // Convert JSON object into a Javascript object.
+        let jsonOutputParsed = JSON.parse(jsonOutput);
+        console.log(`JSON object parsed:\n${jsonOutputParsed}`);
+        console.log(`JSON object parsed type is: ${typeof jsonOutputParsed}`);
+    }
+
+    let jsonOutputAccessed = output["data"];
 
     // Separate the predicted text from its associated list of tokens for each word in the text.
-    let predictedText = jsonOutputParsed[0];
-    let tokenLists = jsonOutputParsed[1];
+    let predictedText = jsonOutputAccessed[0];
+    let tokenLists = jsonOutputAccessed[1];
     let restructureData = [];
 
     // Take a look at our data.
-    if(debug) {
+    if (debug) {
         console.log(`Predicted text:\n${predictedText}`);
 
-        Object.keys(tokenLists).forEach(function(key) {
+        Object.keys(tokenLists).forEach(function (key) {
             console.log(key + " " + tokenLists[key]);
         });
     }
 
     // Convert data for use in D3.
-    Object.keys(tokenLists).forEach(function(key) {
+    Object.keys(tokenLists).forEach(function (key) {
         restructureData.push({"word": key, "recs_shown": tokenLists[key]})
     });
-    if(debug) {
-        for(let i = 0; i < restructureData.length; i++) {
+    if (debug) {
+        for (let i = 0; i < restructureData.length; i++) {
             console.log(`Restructured Data Word:\n ${restructureData[i].word}`);
             console.log(`Restructured Data Tokens:\n ${restructureData[i].recs_shown}`);
         }

@@ -37,8 +37,8 @@ FIXME: Need to include huggingface-transformers repository within GitHub Pages r
 import pandas as pd
 import csv
 from flask import Flask, jsonify, request, render_template
-from huggingface_transformers import run_generation_visualization_auto as rgv
-from huggingface_transformers import run_generation_visualization_dynamic as rgvd
+# from huggingface_transformers import run_generation_visualization_auto as rgv
+# from huggingface_transformers import run_generation_visualization_dynamic as rgvd
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 debug = False
@@ -91,7 +91,17 @@ def get_input_text():
             user_input_string = request_json.get('user_input_text')
 
             # Call GPT-2 model.
-            user_output_string = rgv.main(user_input_string)
+            # user_output_string = rgv.main(user_input_string)
+
+            # Faked return data:
+            user_output_string = ["Hello\nI have to admit I am not sure what to make out about it, I'm not a",
+                    {0: [',', '.', '\n'], 1: ['\n', 'I', 'The'], 2: ["'m", "'ve", ' have'], 3: [' been', ' a', ' to'],
+                     4: [' say', ' admit', ' tell'], 5: [',', ' that', ' I'], 6: [' was', "'m", ' am'],
+                     7: [' a', ' not', ' very'], 8: [' a', ' sure', ' quite'], 9: [' if', ' what', ' how'],
+                     10: [' to', ' I', ' the'], 11: [' say', ' make', ' do'], 12: [' of', ' out', ' about'],
+                     13: [' of', ' about', '.'], 14: [' this', ' the', ' it'], 15: ['.', ',', ' but'],
+                     16: [' but', ' I', ' so'], 17: [' am', ' just', "'m"], 18: [' not', ' just', ' sure'],
+                     19: [' sure', ' really', ' a']}]
 
             if debug:
                 print(f"User input text received")
@@ -142,7 +152,21 @@ def get_input_text_for_visualization_demo():
             user_input_string = request_json.get('user_input_text')
 
             # Call GPT-2 model, which returns predictions and other data.
-            data = rgvd.main(user_input_string)
+            # data = rgvd.main(user_input_string)
+
+            # Faked return data:
+            data = ["Hello\nI have to admit I am not sure what to make out about it, I'm not a",
+                                  {0: [',', '.', '\n'], 1: ['\n', 'I', 'The'], 2: ["'m", "'ve", ' have'],
+                                   3: [' been', ' a', ' to'],
+                                   4: [' say', ' admit', ' tell'], 5: [',', ' that', ' I'], 6: [' was', "'m", ' am'],
+                                   7: [' a', ' not', ' very'], 8: [' a', ' sure', ' quite'],
+                                   9: [' if', ' what', ' how'],
+                                   10: [' to', ' I', ' the'], 11: [' say', ' make', ' do'],
+                                   12: [' of', ' out', ' about'],
+                                   13: [' of', ' about', '.'], 14: [' this', ' the', ' it'], 15: ['.', ',', ' but'],
+                                   16: [' but', ' I', ' so'], 17: [' am', ' just', "'m"],
+                                   18: [' not', ' just', ' sure'],
+                                   19: [' sure', ' really', ' a']}]
 
             if debug:
                 print(f"User input text received")
