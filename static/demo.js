@@ -165,6 +165,16 @@ demo.auto = () => {
     programMode = "auto";
     inputText = demo.getInputText();
 
+    if (debug) {
+        // Test we can convert to JSON format.
+        let test_string_conversion = JSON.stringify({"user_input_text": inputText});
+        console.log(`Conversion to string: ${test_string_conversion}`);
+        console.log(`Type is: ${typeof test_string_conversion}`);
+        let test_json_conversion = JSON.parse(test_string_conversion);
+        console.log(`Conversion to JSON: ${test_json_conversion}`);
+        console.log(`Type is: ${typeof test_json_conversion}`);
+    }
+
     // POST the user input text to the web server.
     fetch('/getInputText', {
         // Specify the method.
@@ -180,6 +190,7 @@ demo.auto = () => {
         // Wait for the web server to return the results.
         return response.text();
     }).then(function (text) {
+        console.log(`From Flask/Python: ${text}`);
         // Output the results of the text prediction model.
         demo.outputResults(`${text}`)
     });
@@ -207,6 +218,7 @@ demo.dynamic = () => {
         // Wait for the web server to return the results.
         return response.text();
     }).then(function (jsonObj) {
+        console.log(`From Flask/Python: ${jsonObj}`);
         // Output the returned data.
         demo.outputResults(`${jsonObj}`);
         demo.drawVisualization(jsonObj);
@@ -244,6 +256,9 @@ demo.outputResults = (output) => {
  */
 function processData(data) {
     // Do something.
+    if (debug) {
+        console.log(data);
+    }
     return undefined;
 }
 
@@ -271,6 +286,21 @@ demo.importTestDataset = () => {
  */
 demo.drawVisualization = (output) => {
 
+    if (debug) {
+        console.log(`Output variable:\n${output}`);
+        console.log(`Output variable is of type: ${typeof output}`);
+
+        // Convert test data from GPT2-model into a JSON object as expected of Flask response.
+        let jsonOutput = JSON.stringify(output);
+        console.log(`JSON object:\n${jsonOutput}`);
+        console.log(`JSON object type is: ${typeof jsonOutput}`);
+
+        // Convert JSON object into a Javascript object.
+        let jsonOutputParsed = JSON.parse(jsonOutput);
+        console.log(`JSON object parsed:\n${jsonOutputParsed}`);
+        console.log(`JSON object parsed type is: ${typeof jsonOutputParsed}`);
+    }
+
     let jsonOutputAccessed = output["data"];
 
     // Separate the predicted text from its associated list of tokens for each word in the text.
@@ -278,10 +308,25 @@ demo.drawVisualization = (output) => {
     let tokenLists = jsonOutputAccessed[1];
     let restructureData = [];
 
+    // Take a look at our data.
+    if (debug) {
+        console.log(`Predicted text:\n${predictedText}`);
+
+        Object.keys(tokenLists).forEach(function (key) {
+            console.log(key + " " + tokenLists[key]);
+        });
+    }
+
     // Convert data for use in D3.
     Object.keys(tokenLists).forEach(function (key) {
         restructureData.push({"word": key, "recs_shown": tokenLists[key]})
     });
+    if (debug) {
+        for (let i = 0; i < restructureData.length; i++) {
+            console.log(`Restructured Data Word:\n ${restructureData[i].word}`);
+            console.log(`Restructured Data Tokens:\n ${restructureData[i].recs_shown}`);
+        }
+    }
 
     // TODO - dynamic resizing of svg width based on the length of the predicted text and its tokens.
     d3.selectAll('svg#visualization-svg')  // select the svg element
@@ -299,6 +344,20 @@ demo.drawVisualization = (output) => {
         .attr('y', (d, i) => i * 20)
         .text(d => d.word)
         .style('fill', d => d.matchesParent ? 'red' : 'black')
+
+    // let suggestionsGroup = svg.append('g');
+    //
+    // suggestionsGroup.selectAll('g')
+    //     .data(restructureData)
+    //     .enter().append('g')
+    //     .style('transform', (d, i) => 'translate(' + (i * 100) + 'px, 50px)')
+    //     .selectAll('text')
+    //     .data(d => (d.recs_shown || []).map(word => ({word: word, matchesParent: word === d.word})))
+    //     .enter().append('text')
+    //     .attr('x', 0)
+    //     .attr('y', (d, i) => i * 20)
+    //     .text(d => d.word)
+    //     .style('fill', d => d.matchesParent ? 'red' : 'black')
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
