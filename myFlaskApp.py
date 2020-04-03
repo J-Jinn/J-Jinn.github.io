@@ -1,11 +1,11 @@
 """
 myFlaskApp.py defines a Flask web framework for sending/receiving data from demo.html, demo.css, and demo.js
 
-Course: cs-396/398 Senior Projects
+Course: CS-396/398 Senior Projects
 Course Coordinator: Professor Kenneth
 Adviser: Professor Kenneth Arnold
 Student: Joseph Jinn
-Date: 1-20-20
+Date: 4-01-20
 ############################################################################################################
 Resources:
 
@@ -29,23 +29,24 @@ https://www.pythonanywhere.com/forums/topic/20962/
 
 "The solution is to redirect output to file: pip install -r requirements.txt > /tmp/temp"
 
-FIXME: Need to include huggingface-transformers repository within GitHub Pages repository for Flask web app to function.
+FIXME: Need to include huggingface-transformers repository within GitHub Pages repository for Flask web app to function on PythonAnywhere.com
 
 ############################################################################################################
 """
 
 import pandas as pd
 import csv
+import json
 from flask import Flask, jsonify, request, render_template
-# from huggingface_transformers import run_generation_visualization_auto as rgv
-# from huggingface_transformers import run_generation_visualization_dynamic as rgvd
+
+# from huggingface_transformers import run_generation_visualization_web_app as rgvwa
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
+app.config['JSON_SORT_KEYS'] = False
 debug = False
 
 
 ############################################################################################################
-
 
 @app.route('/')
 def home_page():
@@ -91,24 +92,27 @@ def get_input_text():
             user_input_string = request_json.get('user_input_text')
 
             # Call GPT-2 model.
-            # user_output_string = rgv.main(user_input_string)
+            # user_output_string = rgvwa.main(user_input_string)[0]
 
             # Faked return data:
-            user_output_string = ["Hello\nI have to admit I am not sure what to make out about it, I'm not a",
-                    {0: [',', '.', '\n'], 1: ['\n', 'I', 'The'], 2: ["'m", "'ve", ' have'], 3: [' been', ' a', ' to'],
-                     4: [' say', ' admit', ' tell'], 5: [',', ' that', ' I'], 6: [' was', "'m", ' am'],
-                     7: [' a', ' not', ' very'], 8: [' a', ' sure', ' quite'], 9: [' if', ' what', ' how'],
-                     10: [' to', ' I', ' the'], 11: [' say', ' make', ' do'], 12: [' of', ' out', ' about'],
-                     13: [' of', ' about', '.'], 14: [' this', ' the', ' it'], 15: ['.', ',', ' but'],
-                     16: [' but', ' I', ' so'], 17: [' am', ' just', "'m"], 18: [' not', ' just', ' sure'],
-                     19: [' sure', ' really', ' a']}]
+            data = ['Hello\nThe last time I saw a post on this blog was about my new blog, "The Best',
+                                  {'\n': [',', '.', '\n'], 'The': ['\n', 'I', 'The'],
+                                   ' last': [' first', ' following', ' last'], ' few': [' time', ' thing', ' few'],
+                                   ' you': [' I', ' we', ' you'], ' wrote': [' checked', ' saw', ' wrote'],
+                                   ' a': [' the', ' this', ' a'], ' post': [',', '.', ' post'],
+                                   ' by': [' about', ' on', ' by'], ' reddit': [' this', ' the', ' reddit'],
+                                   ' forum': [' blog', ' site', ' forum'], ' I': [',', ' was', ' I'],
+                                   ' about': [' in', ' on', ' about'], ' my': [' a', ' the', ' my'],
+                                   ' wife': [' new', ' first', ' wife'], ' blog': [' book', ' project', ' blog'],
+                                   ' and': [' The', ' "', ' and'], 'What': ['The', 'How', 'What'],
+                                   ' Best': [' Art', ' New', ' Best']}]
 
             if debug:
                 print(f"User input text received")
                 print(f"From HTML/Javascript: {request.get_json()}")  # parse as JSON
                 print(f"User input text: {user_input_string}")
-                print(f"User output text: {user_output_string}")
-            return user_output_string, 200
+                print(f"User output text: {data}")
+            return jsonify({'data': data}), 200
             # return user_input_string, 200
         else:
             print(f"Data is not in JSON format!")
@@ -119,7 +123,7 @@ def get_input_text():
 def send_visualization_data():
     """
     Function to GET for visualization.js.
-    TODO: rewrite run_generation_visualization in order to obtain actual data.
+    TODO: rewrite run_generation_visualization in order to obtain actual data. (deprecate later)
     :return: String/CSV
     """
     dataset_filepath = "static/files/next_token_logits_test"
@@ -152,21 +156,19 @@ def get_input_text_for_visualization_demo():
             user_input_string = request_json.get('user_input_text')
 
             # Call GPT-2 model, which returns predictions and other data.
-            # data = rgvd.main(user_input_string)
+            # data = rgvwa.main(user_input_string)
 
             # Faked return data:
-            data = ["Hello\nI have to admit I am not sure what to make out about it, I'm not a",
-                                  {0: [',', '.', '\n'], 1: ['\n', 'I', 'The'], 2: ["'m", "'ve", ' have'],
-                                   3: [' been', ' a', ' to'],
-                                   4: [' say', ' admit', ' tell'], 5: [',', ' that', ' I'], 6: [' was', "'m", ' am'],
-                                   7: [' a', ' not', ' very'], 8: [' a', ' sure', ' quite'],
-                                   9: [' if', ' what', ' how'],
-                                   10: [' to', ' I', ' the'], 11: [' say', ' make', ' do'],
-                                   12: [' of', ' out', ' about'],
-                                   13: [' of', ' about', '.'], 14: [' this', ' the', ' it'], 15: ['.', ',', ' but'],
-                                   16: [' but', ' I', ' so'], 17: [' am', ' just', "'m"],
-                                   18: [' not', ' just', ' sure'],
-                                   19: [' sure', ' really', ' a']}]
+            data = ['Hello\nThe last time I saw a post on this blog was about my new blog, "The Best',
+                    {'\n': [',', '.', '\n'], 'The': ['\n', 'I', 'The'], ' last': [' first', ' following', ' last'],
+                     ' few': [' time', ' thing', ' few'], ' you': [' I', ' we', ' you'],
+                     ' wrote': [' checked', ' saw', ' wrote'], ' a': [' the', ' this', ' a'],
+                     ' post': [',', '.', ' post'], ' by': [' about', ' on', ' by'],
+                     ' reddit': [' this', ' the', ' reddit'], ' forum': [' blog', ' site', ' forum'],
+                     ' I': [',', ' was', ' I'], ' about': [' in', ' on', ' about'], ' my': [' a', ' the', ' my'],
+                     ' wife': [' new', ' first', ' wife'], ' blog': [' book', ' project', ' blog'],
+                     ' and': [' The', ' "', ' and'], 'What': ['The', 'How', 'What'],
+                     ' Best': [' Art', ' New', ' Best']}]
 
             if debug:
                 print(f"User input text received")
@@ -179,8 +181,8 @@ def get_input_text_for_visualization_demo():
             print(f"Data is not in JSON format!")
             return 'Failed to receive user input text.', 200
 
-####################################################################################################################
 
+####################################################################################################################
 
 if __name__ == "__main__":
     """

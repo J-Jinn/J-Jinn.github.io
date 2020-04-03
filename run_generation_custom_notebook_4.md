@@ -36,7 +36,7 @@ Advisor: Professor Kenneth Arnold
 Coordinator: Professor Keith VanderLinden
 Author: Joseph Jinn
 
-run_generation_custom.py defines and implements a bare-bones text modeling and prediction program using the GPT2
+run_generation_console_program.py defines and implements a bare-bones text modeling and prediction program using the GPT2
     model and tokenizer.
 
 #########################################################################################
