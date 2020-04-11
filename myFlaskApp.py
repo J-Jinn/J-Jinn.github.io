@@ -39,7 +39,7 @@ import csv
 import json
 from flask import Flask, jsonify, request, render_template
 
-# from huggingface_transformers import run_generation_visualization_web_app as rgvwa
+from huggingface_transformers import run_generation_visualization_web_app as rgvwa
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.config['JSON_SORT_KEYS'] = False
@@ -156,19 +156,19 @@ def get_input_text_for_visualization_demo():
             user_input_string = request_json.get('user_input_text')
 
             # Call GPT-2 model, which returns predictions and other data.
-            # data = rgvwa.main(user_input_string)
+            data = rgvwa.main(user_input_string)
 
-            # Faked return data:
-            data = ['Hello\nThe last time I saw a post on this blog was about my new blog, "The Best',
-                    {'\n': [',', '.', '\n'], 'The': ['\n', 'I', 'The'], ' last': [' first', ' following', ' last'],
-                     ' few': [' time', ' thing', ' few'], ' you': [' I', ' we', ' you'],
-                     ' wrote': [' checked', ' saw', ' wrote'], ' a': [' the', ' this', ' a'],
-                     ' post': [',', '.', ' post'], ' by': [' about', ' on', ' by'],
-                     ' reddit': [' this', ' the', ' reddit'], ' forum': [' blog', ' site', ' forum'],
-                     ' I': [',', ' was', ' I'], ' about': [' in', ' on', ' about'], ' my': [' a', ' the', ' my'],
-                     ' wife': [' new', ' first', ' wife'], ' blog': [' book', ' project', ' blog'],
-                     ' and': [' The', ' "', ' and'], 'What': ['The', 'How', 'What'],
-                     ' Best': [' Art', ' New', ' Best']}]
+            # # Faked return data:
+            # data = ['Hello\nThe last time I saw a post on this blog was about my new blog, "The Best',
+            #         {'\n': [',', '.', '\n'], 'The': ['\n', 'I', 'The'], ' last': [' first', ' following', ' last'],
+            #          ' few': [' time', ' thing', ' few'], ' you': [' I', ' we', ' you'],
+            #          ' wrote': [' checked', ' saw', ' wrote'], ' a': [' the', ' this', ' a'],
+            #          ' post': [',', '.', ' post'], ' by': [' about', ' on', ' by'],
+            #          ' reddit': [' this', ' the', ' reddit'], ' forum': [' blog', ' site', ' forum'],
+            #          ' I': [',', ' was', ' I'], ' about': [' in', ' on', ' about'], ' my': [' a', ' the', ' my'],
+            #          ' wife': [' new', ' first', ' wife'], ' blog': [' book', ' project', ' blog'],
+            #          ' and': [' The', ' "', ' and'], 'What': ['The', 'How', 'What'],
+            #          ' Best': [' Art', ' New', ' Best']}]
 
             if debug:
                 print(f"User input text received")
@@ -176,6 +176,7 @@ def get_input_text_for_visualization_demo():
                 print(f"User input text: {user_input_string}")
                 print(f"Data from GPT-2 Model: {data}")
 
+            # FIXME - Do NOT sort the keys....
             return jsonify({'data': data}), 200
         else:
             print(f"Data is not in JSON format!")

@@ -13,6 +13,7 @@ Date: 4-01-20
 // Global variables.
 const debug = true;
 const demo = {};
+let saveJsonObject;
 
 const testData = {
     "data": [
@@ -250,7 +251,7 @@ demo.drawVisualization = (output) => {
     //     console.log(`JSON object parsed type is: ${typeof jsonOutputParsed}`);
     // }
 
-    output = JSON.parse(output); // Derp, convert string to Javascript object first.
+    output = JSON.parse(output); // Derp, convert string to Javascript object first. (disable when testing)
 
     // Separate the predicted text from its associated list of tokens for each word in the text.
     let predictedText = output["data"][0];
@@ -267,31 +268,103 @@ demo.drawVisualization = (output) => {
     demo.outputResults(predictedText);
     // Convert data for use in D3.
     Object.keys(tokenLists).forEach(function (key) {
-        restructureData.push({"word": key, "recs_shown": tokenLists[key]})
+        restructureData.push({"selected_token": key, "token_choices": tokenLists[key]})
     });
     if (debug) {
+        console.log(restructureData);
+
         for (let i = 0; i < restructureData.length; i++) {
-            console.log(`Restructured Data Word:\n ${restructureData[i].word}`);
-            console.log(`Restructured Data Tokens:\n ${restructureData[i].recs_shown}`);
+            console.log(`Restructured Data Word:\n ${restructureData[i].selected_token}`);
+            console.log(`Restructured Data Tokens:\n ${restructureData[i].token_choices}`);
         }
     }
 
+    let getSelectedText = "";
+    let inputTokens = [];
+    let inputString = "";
+
     // TODO - dynamic resizing of svg width based on the length of the predicted text and its tokens.
-    d3.selectAll('svg#visualization-svg')  // select the svg element
-        .attr('width', 3840)
+    let my_svg = d3.selectAll('svg#visualization-svg');  // select the svg element
+    // https://stackoverflow.com/questions/10784018/how-can-i-remove-or-replace-svg-content
+    my_svg.selectAll("*").remove(); // Permits re-draw for each iteration.
+    my_svg.attr('width', 3840)
         .attr('height', 240)
         .selectAll('g')  // new selection starts here (and is empty for now)
         .data(restructureData)
         .enter()
-        .append('g')     // selection now has 11 rects, each associated with 1 row of data.
+        .append('g')     // selection now has n 'g' elements, one for each selected_token
         .style('transform', (d, i) => 'translate(' + (i * 100) + 'px, 50px)')
         .selectAll('text')
-        .data(d => (d.recs_shown || []).map(word => ({word: word, matchesParent: word === d.word})))
-        .enter().append('text')
+        .data(d => (d.token_choices || []).map(selected_token => ({
+            selected_token: selected_token,
+            matchesParent: selected_token === d.selected_token
+        })))
+        .enter()
+        .append('text')
         .attr('x', 0)
         .attr('y', (d, i) => i * 20)
-        .text(d => d.word)
-        .style('fill', d => d.matchesParent ? 'red' : 'black')
+        .text(d => d.selected_token)
+        .style('fill', d => d.matchesParent ? 'red' : '#00a515')
+        .on('mouseover', function (d, i) {
+            console.log("mouseover on", this);
+            d3.select(this)
+                .style('fill', '#ffaf53');
+        })
+        .on('mouseout', function (d, i) {
+            console.log("mouseout", this);
+            d3.select(this)
+                .style('fill', d => d.matchesParent ? 'red' : '#00a515');
+        })
+        .on('click', function (d, i) {
+            console.log("clicking on", this);
+            getSelectedText = d3.select(this).text();
+            console.log(getSelectedText);
+
+            // Ghetto way of constructing the tokens we want to send back to the GPT-2 model.
+            // https://stackoverflow.com/questions/1564818/how-to-break-nested-loops-in-javascript/1564838
+            (function () {
+                for (let key in tokenLists) {
+                    console.log(`key: ${key}`);
+                    for (let value = 0; value < tokenLists[key].length; value++) {
+                        if (tokenLists[key][value] === getSelectedText) {
+                            inputTokens.push(getSelectedText);
+                            inputString = inputString.concat(getSelectedText);
+                            return;
+                        }
+                    }
+                    inputTokens.push(key);
+                    // FIXME - not saving the first token...
+                    inputString = inputString.concat(key);
+                }
+            })();
+            console.log(`Input tokens: ${inputTokens}`);
+            console.log(`Input string: ${inputString}`);
+
+            // POST the user input text to the web server.
+            fetch('/getInputTextForVisualizationDemo', {
+                // Specify the method.
+                method: 'POST',
+                // Specify type of payload.
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // A JSON payload.
+                body:
+                    JSON.stringify({"user_input_text": inputString})
+            }).then(function (response) {
+                // Wait for the web server to return the results.
+                return response.text();
+            }).then(function (jsonObj) {
+                // Output the returned data.
+                console.log(`From Flask/Python: ${jsonObj}`);
+                saveJsonObject = jsonObj;
+            });
+            // Clear for next selection and prediction.
+            inputTokens = [];
+            inputString = "";
+            console.log(`saved json object: ${saveJsonObject}`);
+            demo.drawVisualization(saveJsonObject);
+        });
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
