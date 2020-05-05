@@ -19,14 +19,13 @@
 {% extends "template.html" %}
 {% block content %}
 
-<h1>Demo - Text Prediction (GPT-2 Model)</h1>
-<h2>Note: Buggy and Janky, but functional.</h2>
+<h1>Demo - Interactive Text Prediction Visualization</h1>
 
 <!-- User input -->
 <div id="user-input-div">
     <form id="input-form">
         <label id="input-label">
-            <textarea id="input-text-area" rows="25" cols="150">Enter text here.</textarea>
+            <textarea id="input-text-area">Enter text here.</textarea>
         </label>
     </form>
 </div>
@@ -40,15 +39,15 @@
 
 <!-- Program output -->
 <div id="program-output-div">
-    <canvas id="output-canvas" width="720" height="540">
+    <canvas id="output-canvas">
         <p>Your browser doesn't support the HTML5 canvas element.</p>
     </canvas>
+    <svg id="output-svg"></svg>
 </div>
 
 <!-- Program visualization -->
 <div id="program-visualization-div">
-    <!-- Visualization -->
-    <svg id="visualization-svg" width="720" height="540"></svg>
+    <svg id="visualization-svg"></svg>
 </div>
 
 <!-- Javascript file -->

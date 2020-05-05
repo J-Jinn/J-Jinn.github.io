@@ -129,7 +129,6 @@ def get_input_text_for_visualization_demo():
                 print(f"User input text: {user_input_string}")
                 print(f"Data from GPT-2 Model: {data}")
 
-            # FIXME - Do NOT sort the keys....
             return jsonify({'data': data}), 200
         else:
             print(f"Data is not in JSON format!")

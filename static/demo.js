@@ -11,7 +11,7 @@ Date: 4-01-20
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Global variables.
-const debug = true;
+const debug = false;
 const demo = {};
 let saveJsonObject;
 
@@ -139,7 +139,13 @@ demo.init = () => {
     // Setup canvas for output.
     demo.canvas = $('#output-canvas')[0];
     demo.context = demo.canvas.getContext('2d');
-    demo.context.fillStyle = 'rgb(255,0,0)';
+    demo.canvas.width = 3840;
+    demo.canvas.height = 240;
+
+    // Setup textarea for input.
+    demo.textArea = $('#input-text-area')[0];
+    demo.textArea.rows = 10;
+    demo.textArea.cols = 250;
 
     // Test import data.
     // demo.importTestDataset();
@@ -193,10 +199,35 @@ demo.getInputText = () => {
  * Output text prediction results to canvas object.
  */
 demo.outputResults = (output) => {
+    console.log(output);
     demo.context.clearRect(0, 0, demo.canvas.width, demo.canvas.height);
-    demo.context.fillStyle = "#27cd51;";
+    demo.context.fillStyle = "#27cd51";
     demo.context.font = "italic bold 12px/30px Georgia, serif";
     demo.context.fillText(output, 10, 50);
+
+    let my_svg2 = d3.selectAll('svg#output-svg');
+    my_svg2.selectAll("*").remove(); // Clear SVG.
+    my_svg2.attr('width', 3840)
+        .attr('height', 240)
+        .style('background-color', '#181e3f');
+
+    let my_g = my_svg2.selectAll('g')
+        .data(output)
+        .enter()
+        .append('g');
+
+    my_g.append('rect')
+        .attr('width', 3840)
+        .attr('height', 240)
+        .attr('fill', '#39133f');
+
+    my_g.selectAll('text')
+        .data(output)
+        .enter()
+        .append('text')
+        .attr("font-size", "10em")
+        // .text(function(d) {return d})
+        .text("hello, this is a test!")
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
