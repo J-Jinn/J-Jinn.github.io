@@ -11,11 +11,11 @@ Date: 4-01-20
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Global variables.
-const debug = false;
+const debug = true;
 const demo = {};
 let saveJsonObject;
 
-const testData = {
+const testDataDict = {
     "data": [
         "Hello\nThe last time I saw a post on this blog was about my new blog, \"The Best",
         {
@@ -118,6 +118,174 @@ const testData = {
     ]
 };
 
+const testDataList = {
+    "data": [
+        "Enter text here.\n\nThe first thing you need to do is to create a new file called \"my_file",
+        [
+            [
+                "\n",
+                [
+                    "\n",
+                    "<|endoftext|>",
+                    "\n\n"
+                ]
+            ],
+            [
+                "\n",
+                [
+                    "\n",
+                    "The",
+                    "."
+                ]
+            ],
+            [
+                "The",
+                [
+                    "The",
+                    "\"",
+                    "In"
+                ]
+            ],
+            [
+                " first",
+                [
+                    " first",
+                    " following",
+                    " new"
+                ]
+            ],
+            [
+                " thing",
+                [
+                    " thing",
+                    " time",
+                    " step"
+                ]
+            ],
+            [
+                " you",
+                [
+                    " you",
+                    " I",
+                    " to"
+                ]
+            ],
+            [
+                " need",
+                [
+                    " need",
+                    "'ll",
+                    " should"
+                ]
+            ],
+            [
+                " to",
+                [
+                    " to",
+                    " is",
+                    " are"
+                ]
+            ],
+            [
+                " do",
+                [
+                    " do",
+                    " know",
+                    " understand"
+                ]
+            ],
+            [
+                " is",
+                [
+                    " is",
+                    " to",
+                    " when"
+                ]
+            ],
+            [
+                " to",
+                [
+                    " to",
+                    " create",
+                    " install"
+                ]
+            ],
+            [
+                " create",
+                [
+                    " create",
+                    " add",
+                    " set"
+                ]
+            ],
+            [
+                " a",
+                [
+                    " a",
+                    " an",
+                    " the"
+                ]
+            ],
+            [
+                " new",
+                [
+                    " new",
+                    " file",
+                    " folder"
+                ]
+            ],
+            [
+                " file",
+                [
+                    " file",
+                    " folder",
+                    " directory"
+                ]
+            ],
+            [
+                " called",
+                [
+                    " called",
+                    " named",
+                    " in"
+                ]
+            ],
+            [
+                " \"",
+                [
+                    " \"",
+                    " '",
+                    "."
+                ]
+            ],
+            [
+                "my",
+                [
+                    "my",
+                    "config",
+                    "C"
+                ]
+            ],
+            [
+                "_",
+                [
+                    "_",
+                    "-",
+                    "."
+                ]
+            ],
+            [
+                "file",
+                [
+                    "file",
+                    "project",
+                    "data"
+                ]
+            ]
+        ]
+    ]
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -151,7 +319,7 @@ demo.init = () => {
     // demo.importTestDataset();
 
     // Test draw visualization.
-    // demo.drawVisualization(testData);
+    // demo.drawVisualization(testDataList);
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -284,6 +452,31 @@ demo.drawVisualization = (output) => {
 
     output = JSON.parse(output); // Derp, convert string to Javascript object first. (disable when testing)
 
+    let myDict = {};
+
+    console.log("Convert to dictionary");
+    console.log(output);
+    let myData = output["data"];
+
+    let myText = myData[0];
+    console.log(`myText: ${myText}`);
+
+    let myTokens = myData[1];
+    console.log(`myTokens: ${myTokens}`);
+    console.log(`type of myTokens: ${typeof(myTokens)}`);
+    console.log(`Length of myTokens: ${myTokens.length}`);
+
+    for (let item = 0; item < myTokens.length; item++) {
+        console.log(myTokens[item]);
+        console.log(`type of myTokens[item]: ${typeof(myTokens[item])}`);
+        let myKey = myTokens[item][0];
+        console.log(`myKey: ${myKey}`);
+        let myValue = myTokens[item][1];
+        console.log(`myValue: ${myValue}`);
+        myDict[myKey] = myValue;
+        console.log(`myDict for current iteration: key "${myKey}" ::: value "${myDict[myKey]}"`);
+    }
+
     // Separate the predicted text from its associated list of tokens for each word in the text.
     let predictedText = output["data"][0];
     let tokenLists = output["data"][1];
@@ -292,14 +485,18 @@ demo.drawVisualization = (output) => {
     if (debug) {
         console.log(`Predicted text:\n${predictedText}`);
 
-        Object.keys(tokenLists).forEach(function (key) {
-            console.log(key + " " + tokenLists[key]);
+        console.log(`tokenLists content:`);
+        Object.keys(myDict).forEach(function (key) {
+            console.log(key + " ::::: " + myDict[key]);
         });
     }
-    demo.outputResults(predictedText);
+
+    // Output the prediction to canvas element.
+    demo.outputResults(myText);
+
     // Convert data for use in D3.
-    Object.keys(tokenLists).forEach(function (key) {
-        restructureData.push({"selected_token": key, "token_choices": tokenLists[key]})
+    Object.keys(myDict).forEach(function (key) {
+        restructureData.push({"selected_token": key, "token_choices": myDict[key]})
     });
     if (debug) {
         console.log(restructureData);
@@ -354,10 +551,24 @@ demo.drawVisualization = (output) => {
             // Ghetto way of constructing the tokens we want to send back to the GPT-2 model.
             // https://stackoverflow.com/questions/1564818/how-to-break-nested-loops-in-javascript/1564838
             (function () {
-                for (let key in tokenLists) {
+                // for (let key in tokenLists) {
+                //     console.log(`key: ${key}`);
+                //     for (let value = 0; value < tokenLists[key].length; value++) {
+                //         if (tokenLists[key][value] === getSelectedText) {
+                //             inputTokens.push(getSelectedText);
+                //             inputString = inputString.concat(getSelectedText);
+                //             return;
+                //         }
+                //     }
+                //     inputTokens.push(key);
+                //     // FIXME - not saving the first token...
+                //     inputString = inputString.concat(key);
+                // }
+
+                for (let key in myDict) {
                     console.log(`key: ${key}`);
-                    for (let value = 0; value < tokenLists[key].length; value++) {
-                        if (tokenLists[key][value] === getSelectedText) {
+                    for (let value = 0; value < myDict[key].length; value++) {
+                        if (myDict[key][value] === getSelectedText) {
                             inputTokens.push(getSelectedText);
                             inputString = inputString.concat(getSelectedText);
                             return;
@@ -367,6 +578,7 @@ demo.drawVisualization = (output) => {
                     // FIXME - not saving the first token...
                     inputString = inputString.concat(key);
                 }
+
             })();
             console.log(`Input tokens: ${inputTokens}`);
             console.log(`Input string: ${inputString}`);
