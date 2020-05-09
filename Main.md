@@ -46,6 +46,4 @@ TODO: Host Project Flask Web App on Calvin's Data science workstation
 
 [Video Presentation (>_<)](https://web.microsoftstream.com/video/d091902a-44d2-4513-8520-489f6d183dfb)
 
-
-
-
+[Video Presentation - Alternate Link if above doesn't work](https://youtu.be/7iZ34IS1pbU)
