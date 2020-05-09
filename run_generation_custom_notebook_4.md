@@ -7,7 +7,7 @@
 
 - https://github.com/J-Jinn/CS-396-398
 
-- https://j-jinn.github.io/CS-396-398/
+- https://github.com/J-Jinn/J-Jinn.github.io
 
 
 ## Summary of Progress:
@@ -18,7 +18,7 @@ A simplified version of run_generation.py with only the essential elements requi
 
 The codebase below contains a command-line based interactive program that asks the user to input a text string of some sort (anything besides a empty string).  It then asks whether the user wishes to run in "auto" or "interactive" mode.  The automated mode simply runs through text prediction generation with default settings in order to showcase the capabilities of the GPT2 model.  The interactive mode asks the user to determine the # of iterations to run the text prediction for, the "k" value to specify for retrieving the top "k" most likely words using greedy sampling, the temperature value to scale the logits by, and the next word token to choose for text prediction.  Each iteration through the loop that generates the text prediction will ask the user to choose the next word token.
 
-We have plans to create a web-based application as a front-end for demonstration purposes.  This component of the project could possibly begin as early as the Interim Semester 2020 as we are taking Professor Pruim's course Math-W81 Data Visualization with D3, which is essentially web development for visualization data using HTML, CSS, Javascript, and the D3 library.  It may be possible to incorporate our Senior Project into the class and use the month of January to create a simple webpage that asks the user to input text and outputs the results of the generated text prediction.  It would be site similar to the Huggingface-Transformers site that demonstrates the capabilities of each of the models available in the Transformers library.
+We have plans to create a web-based application as a front-end for demonstration purposes.  This component of the project could possibly begin as early as the Interim Semester 2020 as we are taking Professor Pruim's course Math-W81 Data Visualization with D3, which is essentially web development for visualization_concept data using HTML, CSS, Javascript, and the D3 library.  It may be possible to incorporate our Senior Project into the class and use the month of January to create a simple webpage that asks the user to input text and outputs the results of the generated text prediction.  It would be site similar to the Huggingface-Transformers site that demonstrates the capabilities of each of the models available in the Transformers library.
 
 Provided Professor Kenneth Arnold is available during the duration of Xmas vaction and the Interim 2020 Semester, we plan to continue moderate amounts of work daily on this project in order to make hopefully significant progress during the month and two weeks or so before the beginning of Spring Semester 2020.  We do have plans to submit to the ACM UIST - User Interface Software and Technology Symposium provided sufficient progress has been made and there is enough time to prepare the required submission materials.
 

@@ -11,7 +11,7 @@ Date: 4-01-20
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Global variables.
-const debug = true;
+const debug = false;
 const demo = {};
 let saveJsonObject;
 
@@ -318,7 +318,7 @@ demo.init = () => {
     // Test import data.
     // demo.importTestDataset();
 
-    // Test draw visualization.
+    // Test draw visualization_concept.
     // demo.drawVisualization(testDataList);
 };
 
@@ -373,29 +373,29 @@ demo.outputResults = (output) => {
     demo.context.font = "italic bold 12px/30px Georgia, serif";
     demo.context.fillText(output, 10, 50);
 
-    let my_svg2 = d3.selectAll('svg#output-svg');
-    my_svg2.selectAll("*").remove(); // Clear SVG.
-    my_svg2.attr('width', 3840)
-        .attr('height', 240)
-        .style('background-color', '#181e3f');
-
-    let my_g = my_svg2.selectAll('g')
-        .data(output)
-        .enter()
-        .append('g');
-
-    my_g.append('rect')
-        .attr('width', 3840)
-        .attr('height', 240)
-        .attr('fill', '#39133f');
-
-    my_g.selectAll('text')
-        .data(output)
-        .enter()
-        .append('text')
-        .attr("font-size", "10em")
-        // .text(function(d) {return d})
-        .text("hello, this is a test!")
+    // let my_svg2 = d3.selectAll('svg#output-svg');
+    // my_svg2.selectAll("*").remove(); // Clear SVG.
+    // my_svg2.attr('width', 3840)
+    //     .attr('height', 240)
+    //     .style('background-color', '#181e3f');
+    //
+    // let my_g = my_svg2.selectAll('g')
+    //     .data(output)
+    //     .enter()
+    //     .append('g');
+    //
+    // my_g.append('rect')
+    //     .attr('width', 3840)
+    //     .attr('height', 240)
+    //     .attr('fill', '#39133f');
+    //
+    // my_g.selectAll('text')
+    //     .data(output)
+    //     .enter()
+    //     .append('text')
+    //     .attr("font-size", "10em")
+    //     // .text(function(d) {return d})
+    //     .text("hello, this is a test!")
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -422,13 +422,13 @@ demo.importTestDataset = () => {
         console.log(error);
         console.log('Failed to import data.');
     });
-    d3.selectAll('svg#visualization');
+    d3.selectAll('svg#visualization_concept');
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Function to process and visualization GPT2-model predicted text.
+ * Function to process and visualization_concept GPT2-model predicted text.
  * Note: Ugly as hell code but functional...
  *
  * @param output - JSON response object.
@@ -453,28 +453,34 @@ demo.drawVisualization = (output) => {
     output = JSON.parse(output); // Derp, convert string to Javascript object first. (disable when testing)
 
     let myDict = {};
-
-    console.log("Convert to dictionary");
-    console.log(output);
     let myData = output["data"];
-
     let myText = myData[0];
-    console.log(`myText: ${myText}`);
-
     let myTokens = myData[1];
-    console.log(`myTokens: ${myTokens}`);
-    console.log(`type of myTokens: ${typeof(myTokens)}`);
-    console.log(`Length of myTokens: ${myTokens.length}`);
+
+    if (debug) {
+        console.log("Convert to dictionary");
+        console.log(output);
+        console.log(`myText: ${myText}`);
+
+        console.log(`myTokens: ${myTokens}`);
+        console.log(`type of myTokens: ${typeof(myTokens)}`);
+        console.log(`Length of myTokens: ${myTokens.length}`);
+
+    }
 
     for (let item = 0; item < myTokens.length; item++) {
-        console.log(myTokens[item]);
-        console.log(`type of myTokens[item]: ${typeof(myTokens[item])}`);
+
         let myKey = myTokens[item][0];
-        console.log(`myKey: ${myKey}`);
         let myValue = myTokens[item][1];
-        console.log(`myValue: ${myValue}`);
         myDict[myKey] = myValue;
-        console.log(`myDict for current iteration: key "${myKey}" ::: value "${myDict[myKey]}"`);
+
+        if (debug) {
+            console.log(myTokens[item]);
+            console.log(`type of myTokens[item]: ${typeof(myTokens[item])}`);
+            console.log(`myKey: ${myKey}`);
+            console.log(`myValue: ${myValue}`);
+            console.log(`myDict for current iteration: key "${myKey}" ::: value "${myDict[myKey]}"`);
+        }
     }
 
     // Separate the predicted text from its associated list of tokens for each word in the text.

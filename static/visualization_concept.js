@@ -1,5 +1,5 @@
 /*
-visualization.js is the javascript file for visualization.html
+visualization_concept.js is the javascript file for visualization_concept.html
 
 Course: cs-396/398 Senior Projects
 Course Coordinator: Professor Kenneth
@@ -12,7 +12,7 @@ Date: 1-20-20
 
 // Global variables.
 const debug = true;
-const visualization = {};
+const visualization_concept = {};
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -20,7 +20,7 @@ const visualization = {};
  * Call the init function once web page is ready.
  */
 $(document).ready(function () {
-    visualization.init();
+    visualization_concept.init();
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,19 +28,19 @@ $(document).ready(function () {
 /**
  * Initialization function.
  */
-visualization.init = () => {
+visualization_concept.init = () => {
     // Bind functions to event handlers.
-    $('#generate-button').bind('click', visualization.generate);
+    $('#generate-button').bind('click', visualization_concept.generate);
 
     // Setup canvas for output.
-    visualization.canvas = $('#visualization-canvas')[0];
-    visualization.context = visualization.canvas.getContext('2d');
-    visualization.context.fillStyle = 'rgb(255,0,0)';
+    visualization_concept.canvas = $('#visualization-canvas')[0];
+    visualization_concept.context = visualization_concept.canvas.getContext('2d');
+    visualization_concept.context.fillStyle = 'rgb(255,0,0)';
 
     // Load images.
-    visualization.loadImages();
+    visualization_concept.loadImages();
     // Draw images.
-    visualization.drawBackground();
+    visualization_concept.drawBackground();
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +50,7 @@ let background_image;
 /**
  * Load background image.
  */
-visualization.loadImages = () => {
+visualization_concept.loadImages = () => {
     background_image = new Image();
     background_image.src = "../static/images/parchment_texture.jpg";
 };
@@ -58,23 +58,23 @@ visualization.loadImages = () => {
 /**
  * Draw background.
  */
-visualization.drawBackground = () => {
-    visualization.context.clearRect(0, 0, visualization.canvas.width, visualization.canvas.height);
-    visualization.context.drawImage(background_image, 0, 0,
-        parseInt(visualization.canvas.width), parseInt(visualization.canvas.height));
+visualization_concept.drawBackground = () => {
+    visualization_concept.context.clearRect(0, 0, visualization_concept.canvas.width, visualization_concept.canvas.height);
+    visualization_concept.context.drawImage(background_image, 0, 0,
+        parseInt(visualization_concept.canvas.width), parseInt(visualization_concept.canvas.height));
 };
 
 /**
- * Generate visualization button.
+ * Generate visualization_concept button.
  */
-visualization.generate = () => {
+visualization_concept.generate = () => {
     // Test import data as JSON.
-    visualization.importDatasetAsJson();
+    visualization_concept.importDatasetAsJson();
     // Test import CSV using D3.
-    visualization.importDatasetWithD3();
+    visualization_concept.importDatasetWithD3();
 
     // Draw the word tree.
-    visualization.drawWordTree();
+    visualization_concept.drawWordTree();
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,7 +96,7 @@ function processData(data) {
  * Function to import the data as CSV using D3.
  * Note: Must serve files from static folder or sub-folders when using Flask web server.
  */
-visualization.importDatasetWithD3 = () => {
+visualization_concept.importDatasetWithD3 = () => {
     // noinspection SpellCheckingInspection
     d3.csv("/static/files/next_token_logits_test.csv").then(function (data) {
         processData(data);
@@ -104,13 +104,13 @@ visualization.importDatasetWithD3 = () => {
         console.log(error);
         console.log('Failed to import data.');
     });
-    d3.selectAll('svg#visualization');
+    d3.selectAll('svg#visualization-svg');
 };
 
 /**
  * Function to import the data as JSON from Flask web server using GET.
  */
-visualization.importDatasetAsJson = () => {
+visualization_concept.importDatasetAsJson = () => {
     // GET is the default method, so we don't need to set it.
     fetch('/sendVisualizationData')
         .then(function (response) {
@@ -140,7 +140,7 @@ visualization.importDatasetAsJson = () => {
  *
  * TODO: figure out how to construct the necessary data structure/format when using actual live data.
  */
-visualization.drawWordTree = () => {
+visualization_concept.drawWordTree = () => {
     let treeData =
         {
             "name": "Hello",
@@ -190,8 +190,8 @@ visualization.drawWordTree = () => {
             + margin.left + "," + margin.top + ")");
 
     // Ghetto way to redraw background image on canvas after resizing in d3.
-    visualization.context.clearRect(0, 0, width + margin.right + margin.left, height + margin.top + margin.bottom);
-    visualization.context.drawImage(background_image, 0, 0,
+    visualization_concept.context.clearRect(0, 0, width + margin.right + margin.left, height + margin.top + margin.bottom);
+    visualization_concept.context.drawImage(background_image, 0, 0,
         width + margin.right + margin.left,height + margin.top + margin.bottom);
 
     let i = 0,

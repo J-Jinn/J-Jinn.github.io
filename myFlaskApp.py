@@ -36,7 +36,7 @@ from flask import Flask, jsonify, request, render_template
 from huggingface_transformers import run_generation_visualization_web_app as rgvwa
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
-app.config['JSON_SORT_KEYS'] = False
+# app.config['JSON_SORT_KEYS'] = False
 debug = False
 
 
@@ -61,13 +61,13 @@ def demo_page():
     return render_template('demo.html')
 
 
-@app.route('/visualization_page')
-def visualization_page():
+@app.route('/visualization_concept_page')
+def visualization_concept_page():
     """
-    Serve and render our text prediction visualization.html page.
-    :return: visualization.html - render template
+    Serve and render our text prediction visualization_concept.html page.
+    :return: visualization_concept.html - render template
     """
-    return render_template('visualization.html')
+    return render_template('visualization_concept.html')
 
 
 ############################################################################################################
@@ -76,7 +76,7 @@ def visualization_page():
 @app.route('/sendVisualizationData', methods=['GET', 'POST'])
 def send_visualization_data():
     """
-    Function to GET for visualization.js.
+    Function to GET for visualization_concept.js.
     :return: String/CSV
     """
     dataset_filepath = "static/files/next_token_logits_test"
