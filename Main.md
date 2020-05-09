@@ -17,7 +17,7 @@
 [CS-396 Status Report (converted from Jupyter Notebook)](https://j-jinn.github.io/run_generation_custom_notebook_4)
 
 ***
-###### Project Website (GitHub Pages only support static sites, no active back-end functionality)
+###### Project Web App Individual Pages (GitHub Pages only support static sites, no active back-end functionality)
 
 [Project Pages - Home (Project Introduction)](https://j-jinn.github.io/templates/home)
 
@@ -27,10 +27,7 @@
 
 ***
 
-###### Link to Senior Project Flask Web App Hosted on PythonAnywhere.com
+###### Project Web App Hosted on Data Science Workstation
 
-TODO - Flask Web App Hosting on Data Science Workstation.
+TODO: Host Project Flask Web App on Calvin's Data science workstation
 
-Note: Had to upgrade to monthly subscription paid account ($6.00) due to disk space requirements for all packages /sadface.
-
-[Live Project WebApp (Prototype)](http://jj47.pythonanywhere.com/)
