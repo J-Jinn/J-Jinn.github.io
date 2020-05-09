@@ -30,7 +30,7 @@
 
 [Project Pages - Demo (Interactive visualization)](https://j-jinn.github.io/templates/demo)
 
-[Project Pages - Visualization Concept (currently under construction)](https://j-jinn.github.io/templates/visualization)
+[Project Pages - Visualization Concept (currently under construction)](https://j-jinn.github.io/templates/visualization_concept)
 
 ***
 
