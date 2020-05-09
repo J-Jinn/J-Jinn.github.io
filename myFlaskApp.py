@@ -33,7 +33,8 @@ import pandas as pd
 import csv
 import json
 from flask import Flask, jsonify, request, render_template
-from huggingface_transformers import run_generation_visualization_web_app as rgvwa
+
+# from huggingface_transformers import run_generation_visualization_web_app as rgvwa
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 # app.config['JSON_SORT_KEYS'] = False
@@ -109,9 +110,9 @@ def get_input_text_for_visualization_demo():
             user_input_string = request_json.get('user_input_text')
 
             # Call GPT-2 model, which returns predictions and other data.
-            data = rgvwa.main(user_input_string)
+            # data = rgvwa.main(user_input_string)
 
-            # # Faked return data for testing purposes.
+            # Faked return data for testing purposes.
             # data = ['Hello\nThe last time I saw a post on this blog was about my new blog, "The Best',
             #         {'\n': [',', '.', '\n'], 'The': ['\n', 'I', 'The'], ' last': [' first', ' following', ' last'],
             #          ' few': [' time', ' thing', ' few'], ' you': [' I', ' we', ' you'],
@@ -123,13 +124,23 @@ def get_input_text_for_visualization_demo():
             #          ' and': [' The', ' "', ' and'], 'What': ['The', 'How', 'What'],
             #          ' Best': [' Art', ' New', ' Best']}]
 
+            data2 = ["Hello, I'm sorry, but I'm not sure if you're aware of this. I'm not",
+                     [[',', [',', '.', '\n']], [' I', [' I', ' this', ' it']], ["'m", ["'m", ' am', "'ve"]],
+                      [' sorry', [' sorry', ' not', ' going']], [',', [',', '.', ' for']],
+                      [' but', [' but', ' I', ' it']], [' I', [' I', ' you', ' this']], ["'m", ["'m", ' can', ' don']],
+                      [' not', [' not', ' sorry', ' just']], [' sure', [' sure', ' going', ' here']],
+                      [' if', [' if', ' what', ' how']], [' you', [' you', ' I', ' it']],
+                      ["'re", ["'re", ' can', "'ve"]], [' aware', [' aware', ' ready', ' sure']],
+                      [' of', [' of', ' that', '.']], [' this', [' this', ' the', ' it']], ['.', ['.', ',', '."']],
+                      [' I', [' I', '\n', ' It']], ["'m", ["'m", "'ve", ' have']], [' not', [' not', ' sorry', ' a']]]]
+
             if debug:
                 print(f"User input text received")
                 print(f"From HTML/Javascript: {request.get_json()}")  # parse as JSON
                 print(f"User input text: {user_input_string}")
-                print(f"Data from GPT-2 Model: {data}")
+                print(f"Data from GPT-2 Model: {data2}")
 
-            return jsonify({'data': data}), 200
+            return jsonify({'data': data2}), 200
         else:
             print(f"Data is not in JSON format!")
             return 'Failed to receive user input text.', 200
