@@ -42,7 +42,9 @@ TODO: Host Project Flask Web App on Calvin's Data science workstation
 
 ###### Project Material(s)
 
-[Project Final Report - Draft 1](https://drive.google.com/file/d/1dmteycIIO3wZ5_m13kcTwLOuslp5ThRe/view?usp=sharing)
+[Initial Project Proposal](https://drive.google.com/file/d/1aPrCBu3wxxS2QZDQVUA6BUmNCiFpFYfK/view?usp=sharing)
+
+[Project Final Report](https://drive.google.com/file/d/1Dtm1joWy7dFuFw_u6vhBD-Q_fTRdDmDQ/view?usp=sharing)
 
 [Video Presentation (>_<)](https://web.microsoftstream.com/video/d091902a-44d2-4513-8520-489f6d183dfb)
 
